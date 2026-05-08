@@ -1,0 +1,68 @@
+
+📄 Local Resume RAG System
+A privacy-focused, on-premise Retrieval-Augmented Generation (RAG) system built with Python and FastAPI. This system allows you to upload PDF resumes and ask natural language questions about them without any data leaving your local machine.
+
+🚀 Key Features
+100% Local: Uses Ollama (Llama 3) for LLM inference and HuggingFace for embeddings.
+
+Vector Search: Powered by ChromaDB for fast semantic retrieval.
+
+Smart Context: Automatically injects source filenames into chunks so the AI knows exactly whose resume it's reading.
+
+Developer Friendly: Includes API endpoints for uploading, searching, and generating answers.
+
+🛠️ Installations & Setup
+1. Prerequisites
+Python 3.9+
+
+Ollama: Download and install Ollama.
+
+After installing Ollama, pull the Llama 3 model:
+
+Bash
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull llama3
+2. Environment Setup
+Clone the repository and create a virtual environment:
+
+Bash
+source venv/bin/activate  # Windows: venv\Scripts\activate
+3. Install Dependencies
+Install the required Python packages. Note the specific versions to avoid common compatibility issues with NumPy 2.0:
+
+Bash
+pip install fastapi uvicorn python-multipart pypdf chromadb
+pip install "numpy<2" "urllib3<2"
+pip install langchain langchain-community langchain-huggingface langchain-openai
+🚦 Getting Started
+1. Start the Server
+Run the FastAPI backend using Uvicorn:
+
+Bash
+python main.py
+The server will start at http://localhost:8000.
+
+2. Usage via Swagger UI
+FastAPI generates interactive documentation. Go to:
+http://localhost:8000/docs
+
+POST /upload: Upload your PDF resumes here.
+
+GET /search: Test the vector database retrieval (no LLM).
+
+GET /ask: Ask questions like "Who has experience with Node.js?".
+
+GET /stats: See how many files and chunks are currently indexed.
+
+🏗️ Architecture
+The system follows a standard RAG pipeline:
+
+Ingestion: PDF → Text Chunks (via PyPDFLoader).
+
+Embedding: Text Chunks → Vectors (via all-MiniLM-L6-v2).
+
+Storage: Vectors → Disk (via ChromaDB).
+
+Retrieval: Query → Vector Search → Contextual Prompt.
+
+Generation: Context + Query → Ollama (Llama 3) → Answer.
